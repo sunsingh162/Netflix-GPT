@@ -2,6 +2,9 @@
 
 - Create React App
 - Configured TailwindCSS
+- Header
+- Login Form
+- Sign up Form
 
 
 # Features
@@ -17,4 +20,8 @@
         - Movie Lists
 - NetflixGPT
   - Search Bar
-  - Movie Suggestions        
+  - Movie Suggestions
+
+
+
+- Formik Library to use when working with form in react 
