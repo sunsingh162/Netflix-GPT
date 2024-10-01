@@ -1,12 +1,90 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "./Header";
+import { handleValidateData } from "../utils/validateData";
+import { auth } from "../utils/firebase";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [isSignInForm, setIsSignInForm] = useState(true);
+  const [message, setMessage] = useState("");
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
 
   const handleSignUp = () => {
     setIsSignInForm(!isSignInForm);
   };
+
+  const handleFormButtonClick = () => {
+    //Validate credentials
+    const validationMessage = handleValidateData(
+      email.current.value,
+      password.current.value
+    );
+    setMessage(validationMessage);
+    if (message) return;
+
+    if (!isSignInForm) {
+      //handle SignUp Logic
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "https://avatars.githubusercontent.com/u/67745275?v=4",
+          })
+            .then(() => {
+              // Profile updated!
+              const { uid, displayName, email, photoURL } = auth.currentUser;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  displayName: displayName,
+                  email: email,
+                  photoURL: photoURL,
+                })
+              );
+            })
+            .catch((error) => {
+              // An error occurred
+              setMessage(error.message);
+            });
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log(errorMessage);
+        });
+    } else {
+      //handle SignIn Logic
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          console.log(errorMessage);
+        });
+    }
+  };
+
   return (
     <div>
       <Header />
@@ -16,30 +94,44 @@ const Login = () => {
           alt="logo"
         />
       </div>
-      <form className="w-4/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="w-4/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80"
+      >
         <h1 className="font-bold text-3xl py-4">
           {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
-        {!isSignInForm && (<input
-          type="text"
-          placeholder="Email address"
-          className="p-4 my-4 w-full bg-gray-700"
-        />)}
+        {!isSignInForm && (
+          <input
+            type="text"
+            placeholder="Full Name"
+            className="p-4 my-4 w-full bg-gray-700"
+            ref={name}
+          />
+        )}
         <input
           type="text"
           placeholder="Email address"
           className="p-4 my-4 w-full bg-gray-700"
+          ref={email}
         />
         <input
           type="password"
           placeholder="password"
           className="p-4 my-4 w-full bg-gray-700"
+          ref={password}
         />
-        <button className="p-4 my-6 bg-red-700 w-full rounded-lg">
-        {isSignInForm ? "Sign In" : "Sign Up"}
+        <p className="text-red-500">{message}</p>
+        <button
+          onClick={handleFormButtonClick}
+          className="p-4 my-6 bg-red-700 w-full rounded-lg"
+        >
+          {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
         <p onClick={handleSignUp} className="cursor-pointer">
-        {isSignInForm ? "New to Netflix? Sign up now" : "Already Registered? Sign In Now"}
+          {isSignInForm
+            ? "New to Netflix? Sign up now"
+            : "Already Registered? Sign In Now"}
         </p>
       </form>
     </div>
