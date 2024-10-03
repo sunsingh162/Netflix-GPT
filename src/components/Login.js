@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { BG_URL, USER_AVATAR } from "../utils/constants";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL: "https://avatars.githubusercontent.com/u/67745275?v=4",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               // Profile updated!
@@ -90,41 +91,41 @@ const Login = () => {
       <Header />
       <div className="absolute">
         <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/bfc0fc46-24f6-4d70-85b3-7799315c01dd/web/IN-en-20240923-TRIFECTA-perspective_74e21c19-980e-45ef-bd6c-78c1a6ce9381_large.jpg"
+          src={BG_URL}
           alt="logo"
         />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="w-4/12 absolute p-12 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80"
+        className="absolute left-0 right-0 w-4/12 p-10 mx-auto mt-10 text-white bg-black rounded-lg bg-opacity-80"
       >
-        <h1 className="font-bold text-3xl py-4">
+        <h1 className="py-4 text-3xl font-bold">
           {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
         {!isSignInForm && (
           <input
             type="text"
             placeholder="Full Name"
-            className="p-4 my-4 w-full bg-gray-700"
+            className="w-full p-4 my-4 bg-gray-700"
             ref={name}
           />
         )}
         <input
           type="text"
           placeholder="Email address"
-          className="p-4 my-4 w-full bg-gray-700"
+          className="w-full p-4 my-4 bg-gray-700"
           ref={email}
         />
         <input
           type="password"
           placeholder="password"
-          className="p-4 my-4 w-full bg-gray-700"
+          className="w-full p-4 my-4 bg-gray-700"
           ref={password}
         />
         <p className="text-red-500">{message}</p>
         <button
           onClick={handleFormButtonClick}
-          className="p-4 my-6 bg-red-700 w-full rounded-lg"
+          className="w-full p-4 my-6 bg-red-700 rounded-lg"
         >
           {isSignInForm ? "Sign In" : "Sign Up"}
         </button>
