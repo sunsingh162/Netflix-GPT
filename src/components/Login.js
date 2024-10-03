@@ -62,11 +62,9 @@ const Login = () => {
               // An error occurred
               setMessage(error.message);
             });
-          console.log(user);
         })
         .catch((error) => {
           const errorMessage = error.message;
-          console.log(errorMessage);
         });
     } else {
       //handle SignIn Logic
@@ -77,11 +75,9 @@ const Login = () => {
       )
         .then((userCredential) => {
           const user = userCredential.user;
-          console.log(user);
         })
         .catch((error) => {
           const errorMessage = error.message;
-          console.log(errorMessage);
         });
     }
   };
