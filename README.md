@@ -36,6 +36,9 @@
 - TMDB Image CDN URL
 - Made Browse Page amazing 
 - usePopularmovies Custom hook, and other custome hooks as well
+- GPT Search feature
+- Multi Language Feature in App (Bonus)
+- Integrate GPT API
 
 
 # Features

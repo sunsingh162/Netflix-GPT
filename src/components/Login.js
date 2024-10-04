@@ -87,13 +87,14 @@ const Login = () => {
       <Header />
       <div className="absolute">
         <img
+        className="object-cover w-screen h-screen"
           src={BG_URL}
           alt="logo"
         />
       </div>
       <form
         onSubmit={(e) => e.preventDefault()}
-        className="absolute left-0 right-0 w-4/12 p-10 mx-auto mt-10 text-white bg-black rounded-lg bg-opacity-80"
+        className="absolute left-0 right-0 w-full p-8 m-20 mx-auto text-white bg-black rounded-lg md:w-3/12 bg-opacity-80"
       >
         <h1 className="py-4 text-3xl font-bold">
           {isSignInForm ? "Sign In" : "Sign Up"}
@@ -102,7 +103,7 @@ const Login = () => {
           <input
             type="text"
             placeholder="Full Name"
-            className="w-full p-4 my-4 bg-gray-700"
+            className="w-full p-4 my-4 bg-gray-700 rounded-lg"
             ref={name}
           />
         )}
